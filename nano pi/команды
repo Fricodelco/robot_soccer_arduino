@@ -1,0 +1,6 @@
+rosrun rosserial_python serial_node.py /dev/ttyACM0
+nmcli wlan0 connect MGTS226 password 21031987
+nmcli connect MGTS226 password 21031987
+nmcli wifi connect MGTS226 password 21031987
+nmcli dev wifi connect MGTS226 password 21031987
+
