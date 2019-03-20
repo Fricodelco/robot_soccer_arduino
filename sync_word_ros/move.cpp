@@ -76,7 +76,7 @@ void Moves::init(int w1, int w2){
 }
 void Moves::ready_for_walk(int w1, int w2){
   
-  setMotors(-130,130,-80,80,-70,70,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,w2,w1,100);
+  setMotors(-130,130,-80,80,-70,70,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,w2,w1,50);
 }
 
 void Moves::FFT_M(int w1, int w2){
