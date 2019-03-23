@@ -1,4 +1,4 @@
-#include "move.h"
+/*#include "move.h"
 #define DEVICE_NAME "3" 
 
 #define BAUDRATE  1000000
@@ -173,4 +173,4 @@ void Moves::setMotorsEnc(int m1,int m2,int m3,int m4,int m5,int m6,int m7,int m8
   goal_position[19]=m20;
   result=dxl_wb.syncWrite(handler_index, &goal_position[0]);
   delay(delayy);
-}
+}*/
