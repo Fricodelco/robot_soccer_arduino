@@ -1,5 +1,5 @@
 
-#include "move.h"
+//#include "move.h"
 #include <ros.h>
 #include <std_msgs/Int16.h>
 #include  <DynamixelWorkbench.h>
@@ -15,8 +15,8 @@ const uint8_t handler_index = 0;
 
 DynamixelWorkbench dxl_wb;
 #define ROS_RATE 50000
-
-ros::NodeHandle nh;
+ros::NodeHandle_<ArduinoHardware, 15, 15, 512, 512> nh;
+//ros::NodeHandle nh;
 int16_t y = 0;
 int16_t Motion_number = 0;
 bool Ball_Detect = false;
@@ -26,7 +26,7 @@ std_msgs::Int16 state_msg;
 ros::Publisher pub_state("dxl_state", &state_msg);
 
 
-void neckY(const std_msgs::Int16& errY)
+/*void neckY(const std_msgs::Int16& errY)
 {
    if(errY.data < 555)//555 if ball not detect
    { 
@@ -34,25 +34,24 @@ void neckY(const std_msgs::Int16& errY)
     if (abs(errY.data)>10)
     {
       if(y>=126)
-        y = 125;
-      else if(y<=-126)
-        y = -125;
+        y = 120;
+      else if(y<=-51)
+        y = -45;
       else 
-        y = y-0.3*errY.data;
+        y = y+0.1*errY.data;
     }
    }
    else
     Ball_Detect = false;
     
-}
+}*/
 void motion(const std_msgs::Int16& motion){
-  state_msg.data = motion.data;
-  pub_state.publish(&state_msg);
   Motion_number = motion.data;
 }
-ros::Subscriber<std_msgs::Int16> neck_sub("forward_y_err", neckY );
+//ros::Subscriber<std_msgs::Int16> neck_sub("forward_y_err", neckY );
 ros::Subscriber<std_msgs::Int16> motion_sub("forward_action", motion );
 
+HardwareTimer Timer(TIMER_CH4);
 void setup() 
 {
   
@@ -69,7 +68,7 @@ void setup()
   for (int cnt = 6; cnt < 18; cnt++)
   {
     dxl_wb.ping(dxl_id[cnt], &model_number); //legs
-    dxl_wb.jointMode(dxl_id[cnt], 350, 0); 
+    dxl_wb.jointMode(dxl_id[cnt], 290, 0); 
   }
   for (int cnt = 18; cnt < 20; cnt++)
   {
@@ -79,13 +78,16 @@ void setup()
   dxl_wb.addSyncWriteHandler(dxl_id[0], "Goal_Position");
   
   // while(!Serial); // Wait for Opening Serial Monitor
-  nh.getHardware()->setBaud(57600); 
+  nh.getHardware()->setBaud(1000000); 
   nh.initNode(); 
-  nh.subscribe(neck_sub);
+  //nh.subscribe(neck_sub);
   nh.subscribe(motion_sub);
   nh.advertise(pub_state);
   ready_for_walk(0,y);
-
+  Timer.stop();
+  Timer.setPeriod(16000);           // in microseconds
+  Timer.attachInterrupt(handler_nh);
+  Timer.start();
   
   
   
@@ -125,8 +127,8 @@ void loop()
     M_R(0,y);
     break;
   case 10:
-    y=0;
-    Search_Ball();
+    ready_for_walk(0,y);
+    //Search_Ball();
     break;
   case 11:
     GET_UP_FRONT(0,y);
@@ -138,16 +140,22 @@ void loop()
     ready_for_walk(0,y);
     break;
   }
-  nh.spinOnce();
+  state_msg.data = Motion_number;
+  pub_state.publish(&state_msg);
+  //nh.spinOnce();
   
 }
-
+void handler_nh(void){
+  nh.spinOnce();
+}
 
 void wait(int t)
 {
   int t1 = 0;
   t1 = millis();
-  while((millis()-t1)<=t){nh.spinOnce();}
+  while((millis()-t1)<=t){//nh.spinOnce();}
+  }
+  
 }
 void setMotors(int m1,int m2,int m3,int m4,int m5,int m6,int m7,int m8,int m9,int m10,int m11,int m12,int m13,int m14,int m15,int m16,int m17,int m18,int m19,int m20,int delayy){
   bool result = false;
@@ -176,7 +184,7 @@ void setMotors(int m1,int m2,int m3,int m4,int m5,int m6,int m7,int m8,int m9,in
 } 
 void ready_for_walk(int w1, int w2){
   
-  setMotors(-130,130,-80,80,-70,70,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,w2,w1,50);
+  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,w2,w1,50);
 }
 void FFT_M(int w1, int w2){
   setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,58,-103,103, 48,-57,  7,12,w2,w1,40);
