@@ -269,28 +269,28 @@ void GET_UP_FRONT(int w1, int w2){
 void Search_Ball(){
   while((Ball_Detect == false) && (Motion_number == 10)){
     ready_for_walk(0,-20); // head up
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-20;break;}
 
 
     ready_for_walk(0,-40); // head down
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-40;break;}
 
           
     ready_for_walk(0,-55); //head down
       if(Ball_Detect == true){y=-55;break;}
-    wait(100);
+    wait(200);
 
     
     ready_for_walk(30,-20); //head left 
     wait(300);
       if(Ball_Detect == true){y=-20;TURN_L(0,y);break;}
     ready_for_walk(30,-40); // 
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-40;TURN_L(0,y);break;} 
     ready_for_walk(30,-60); // 
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-60;TURN_L(0,y);break;} 
 
        
@@ -298,10 +298,10 @@ void Search_Ball(){
     wait(300);
       if(Ball_Detect == true){y=-20;TURN_R(0,y);break;}
     ready_for_walk(-30,-40); // 
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-40;TURN_R(0,y);break;} 
     ready_for_walk(-30,-55); // 
-    wait(100);
+    wait(200);
       if(Ball_Detect == true){y=-55;TURN_R(0,y);break;} 
     TURN_L(0,y);
     TURN_L(0,y);
