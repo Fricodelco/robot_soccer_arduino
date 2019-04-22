@@ -29,7 +29,6 @@ bool Ball_Detect = false;
 
 std_msgs::Byte state_msg;
 ros::Publisher pub_state("motion_ready", &state_msg);
-
 bool start_flag = true;
 void neckY(const std_msgs::Int16& errY)
 {
@@ -96,6 +95,7 @@ void setup()
   nh.subscribe(neck_subX);
   nh.subscribe(motion_sub);
   nh.advertise(pub_state);
+  
   //ready_for_walk(0,y);
   Timer.stop();
   Timer.setPeriod(1000);           // in microseconds
@@ -156,8 +156,9 @@ void loop()
   case 10:
     //ready_for_walk(x,y);
     //Head_Up_Down();
+    Set_Head(x,y);
     pub_state.publish(&state_msg);
-    Search_Ball();
+    //Search_Ball();
     break;
   case 11:
     GET_UP_FRONT(x,y);
@@ -264,14 +265,16 @@ void FRT_M(int w1, int w2){
   setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-58,70,-103,103, 57,-48, -1,-1,y,x,50);
 }
 void  M_R(int w1, int w2){
-  setMotors(-90,90,-68,68,-14,14,-51,51,-25,25,-74,65,-110,103, 60,-51, -7,-1,y,x,100);
-  setMotors(-90,90,-68,68,-14,14,-51,51,-10,10,-65,65,-103,103, 51,-51, -7,-1,y,x,70);
-  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,103,51,-51,-1,1,y,x,100);
+  setMotors(-90,90,-68,68,-14,14,-51,51,-25,25,-74,65,-110,103, 60,-51, -7,-1,y,x,150);
+  setMotors(-90,90,-68,68,-14,14,-51,51,-10,10,-65,65,-103,103, 51,-51, -7,-1,y,x,150);
+  for(int i = 0;i<10;i++)
+  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,103,51,-51,-1,1,y,x,50);
 }
 void M_L(int w1, int w2){
-  setMotors(-90,90,-68,68,-14,14,-51,51,-25,25,-65,74,-103,110, 51,-60, -1,7,y,x,100);
-  setMotors(-90,90,-68,68,-14,14,-51,51,-10,10,-65,65,-103,103, 51,-51, -1,7,y,x,70);
-  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,103,51,-51,-1,1,y,x,100);
+  setMotors(-90,90,-68,68,-14,14,-51,51,-25,25,-65,74,-103,110, 51,-60, -1,7,y,x,150);
+  setMotors(-90,90,-68,68,-14,14,-51,51,-10,10,-65,65,-103,103, 51,-51, -1,7,y,x,150);
+  for(int i = 0; i<10;i++)
+  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,103,51,-51,-1,1,y,x,50);
 }
 void  TURN_R(int w1, int w2, bool ifsee){
   for(int i = 0;i<4;i++)
@@ -302,7 +305,7 @@ void F_Shoot_R(int w1, int w2){
 }
 void F_Shoot_L(int w1, int w2){
   setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,y,x,400);
-   setMotors(-90,90,-68,68,-14,14,-45,45,-15,1,-65,70,-102,100, 51,-20, 10,10,y,x,400);
+   setMotors(-90,90,-68,68,-14,14,-45,45,-14,1,-65,70,-102,100, 51,0, 10,10,y,x,400);
    setMotors(-90,90,-68,68,-14,14,-45,45,-13,1,-65,80,-102,120, 51,10, 15,10,y,x,400);
   setMotors(-90,90,-68,68,-14,14,-45,45,-13,1,-60,110,-102,90, 51,30, 15,10,y,x,700);
   setMotors(-90,90,-68,68,-14,14,-45,45,-13,1,-60,100,-102,90, 51,0, 15,10,y,x,200);
@@ -310,23 +313,28 @@ void F_Shoot_L(int w1, int w2){
   setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-100,100,51,-51,-1,1,y,x,700);
 }
 void GET_UP_BACK(int w1, int w2){
-  setMotors(10,-10,75,-75,3,-3,-46,46,-1,1,26,-25,-117,117,83,-83,-1,1,w2,w1,500);
-  setMotors(-26,26,34,-34,0,0,-45,45,-1,1,25,-25,-94,94,8,-8,-1,1,w2,w1,500);
-  setMotors(10,-10,75,-75,3,-3,-45,45,-1,1,25,-25,-117,117,83,-83,-1,1,w2,w1,500);
-  setMotors(-42,42,36,-36,2,-2,-48,48,-1,1,25,-25,-106,106,83,-82,-1,1,w2,w1,500); //dop move1
-  setMotors(-87,87,2,-2,2,-2,-46,46,-1,1,25,-25,-100,100,83,-83,-1,1,w2,w1,300);
-  setMotors(-85,85,-18,18,-2,2,-46,46,-1,1,0,0,-97,97,73,-73,-1,1,w2,w1,200);//dop move 
- setMotors(-84,84,-32,32,-5,5,-45,45,-1,1,-25,25,-98,98,67,-67,-1,1,w2,w1,100);//dop move2
- setMotors(-82,82,-54,54,-11,11,-45,45,-1,1,-44,44,-100,100,57,-57,-1,1,w2,w1,100);
-  setMotors(-81,81,-68,68,-14,14,-45,45,-1,1,-60,60,-100,100,51,-51,-1,1,w2,w1,600);  
+  setMotors(10,-10,75,-75,3,-3,-46,46,-1,1,26,-25,-117,117,83,-83,-1,1,y,x,500);
+  setMotors(-26,26,34,-34,0,0,-45,45,-1,1,25,-25,-94,94,8,-8,-1,1,y,x,500);
+  setMotors(10,-10,75,-75,3,-3,-45,45,-1,1,25,-25,-117,117,83,-83,-1,1,y,x,500);
+  setMotors(-42,42,36,-36,2,-2,-48,48,-1,1,25,-25,-106,106,83,-82,-1,1,y,x,500); //dop move1
+  setMotors(-87,87,2,-2,2,-2,-46,46,-1,1,25,-25,-100,100,83,-83,-1,1,y,x,300);
+  setMotors(-85,85,-18,18,-2,2,-46,46,-1,1,0,0,-97,97,73,-73,-1,1,y,x,200);//dop move 
+ setMotors(-84,84,-32,32,-5,5,-45,45,-1,1,-25,25,-98,98,67,-67,-1,1,y,x,100);//dop move2
+ setMotors(-82,82,-54,54,-11,11,-45,45,-1,1,-44,44,-100,100,57,-57,-1,1,y,x,100);
+  setMotors(-81,81,-68,68,-14,14,-45,45,-1,1,-60,60,-100,100,51,-51,-1,1,y,x,600);  
 }
 void GET_UP_FRONT(int w1, int w2){
-  setMotors(-81,81,0,0,14,-14,-46,46,-1,1,-48,48,-67,67,30,-30,-1,1,w2,w1,600);
-  setMotors(-14,14,-4,4,-3,3,-46,46,-1,1,-48,48,-67,67,30,-30,-1,1,w2,w1,600);
-  setMotors(29,-29,20,-20,-104,104,-46,46,-4,4,-133,133,-114,114,94,-94,-2,2,w2,w1,500);
-  setMotors(0,0,-22,22,-64,64,-46,46,-2,2,-130,130,-125,125,77,-77,-1,1,w2,w1,500);//DOP MOVE 1
-  setMotors(-34,34,-86,86,-8,8,-46,46,0,0,-126,126,-138,138,56,-56,0,0,w2,w1,500);
-  setMotors(-81,81,-68,68,-14,14,-45,45,-1,1,-80,80,-110,110,51,-51,-1,1,w2,w1,600);
+  setMotors(-81,81,0,0,14,-14,-46,46,-1,1,-48,48,-67,67,30,-30,-1,1,y,x,600);
+  setMotors(-14,14,-4,4,-3,3,-46,46,-1,1,-48,48,-67,67,30,-30,-1,1,y,x,500);
+  setMotors(29,-29,57,-57,-104,104,-46,46,-4,4,-133,133,-114,114,94,-94,-2,2,y,x,500); //dop move 1 aprilya
+  setMotors(29,-29,0,0,-104,104,-46,46,-4,4,-133,133,-114,114,94,-94,-2,2,y,x,500); 
+  setMotors(0,0,-22,22,-64,64,-46,46,-2,2,-130,130,-125,125,77,-77,-1,1,y,x,600);//DOP MOVE 1 
+  setMotors(-25,25,-90,90,0,0,-46,46,0,0,-126,126,-138,138,56,-56,0,0,y,x,1000);
+  setMotors(-45,45,-71,71,-16,16,-46,46,0,0,-105,105,-142,142,55,-55,0,0,y,x,600);//dop move 
+  setMotors(-58,58,-70,70,-15,15,-45,45,0,0,-93,93,-125,125,54,-54,0,0,y,x,500);//dop move
+  //setMotors(-81,81,-71,71,-16,16,-46,46,0,0,-60,60,-130,130,60,-60,0,0,y,x,2000);// dop mov
+ // setMotors(-51,51,-71,71,-16,16,-45,45,0,0,-103,103,-124,124,54,-54,0,0,w2,w1,50);//dop move
+  setMotors(-81,81,-68,68,-14,14,-45,45,-1,1,-60,60,-100,100,51,-51,-1,1,y,x,600);
 }
 void CIRCLE_RIGHT(int w1, int w2){
   setMotors(-90,90,-68,68,-14,14,-51,51,-23,23,-78,65,-115,103, 65,-51, -7,-1,w2,w1,200);
@@ -350,9 +358,9 @@ void CIRCLE_LEFT(int w1, int w2){
 }
 void Set_Head(int w1, int w2){
   
-  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,w2,w1,20);
+  setMotors(-90,90,-68,68,-14,14,-45,45,-1,1,-70,70,-103,102,51,-51,-1,1,y,x,400);
 }
-void Head_Up_Down(){
+/*void Head_Up_Down(){
   
   if(y_old >= y){
     while(Ball_Detect==false && y > -59){
@@ -400,32 +408,34 @@ void Head_Up_Down(){
     }
   }
   
-}
-bool Search_Ball(){
-    Head_Up_Down();  
-    if (Ball_Detect == false && x_old>=0 ){
-      if(x<=25){if(HeadLeft() == true){x=0;TURN_L(x,y,false);TURN_L(x,y,true);return true;}}
-      if(HeadRight() == true){x=0;TURN_R(x,y,false);TURN_R(x,y,true);return true;}
-      x=0;
-      TURN_L(x,y,false);
-      TURN_L(x,y,false);
-      TURN_L(x,y,false);
-      TURN_L(x,y,false); 
+}*/
+bool Search_Ball(){  
+    if (Ball_Detect == false && x>=0 ){
+      if(x<=25){if(HeadLeft() == true){x=30;Set_Head(30,y); return true;}}
+      if(HeadMiddle()==true){x=0;Set_Head(30,y);  return true;}
+      if(HeadRight() == true){x=-30;Set_Head(30,y); return true;}
+      
     }
     else if(Ball_Detect == false){   
-      if(x>=-25){if(HeadRight() == true){x=0;TURN_R(x,y,false);TURN_R(x,y,true);return true;}}
-      if(HeadLeft() == true){x=0;TURN_L(x,y,false);TURN_L(x,y,true);return true;}
-      x=0;
-      TURN_R(x,y,false);
-      TURN_R(x,y,false);
-      TURN_R(x,y,false);
-      TURN_R(x,y,false);
+      if(x>=-25){if(HeadRight() == true){x=-35;Set_Head(30,y); return true;}}
+      if(HeadMiddle()==true){x=0; Set_Head(30,y); return true;}
+      if(HeadLeft() == true){x=30;Set_Head(30,y); return true;}
+      
     }
 }
+bool HeadMiddle(){
+    x=0;
+    Set_Head(x,y); 
+    
+    if(Ball_Detect == true)
+      return true;
+    else
+      return false; 
+}
 bool HeadLeft(){
-    x=30;
-    ready_for_walk(x,y); 
-    Head_Up_Down();
+    x=40;
+    Set_Head(x,y); 
+    
     if(Ball_Detect == true)
       return true;
     else
@@ -433,9 +443,9 @@ bool HeadLeft(){
 }
 
 bool HeadRight(){
-    x=-30;
-    ready_for_walk(-30,y); //head right 
-    Head_Up_Down();
+    x=-40;
+    Set_Head(x,y); //head right 
+    
     if(Ball_Detect == true)
       return true;
     else

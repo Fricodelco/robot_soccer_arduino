@@ -30,11 +30,26 @@ void loop()
   //if(Fall_flag == 0)
   //{
   Moves::ready_for_walk(0,0);
-  delay(5000);
+  delay(4000);
   //Moves::GET_UP_FRONT();
   for(int i = 0;i<80;i++)
-  {
-    Moves::FFT_M(0,0);
+  {Moves::FFT_M(0,0);
+  //Moves::FFT_M(0,0);
+  //Moves::FFT_M(0,0);
+  //Moves::FFT_M(0,0);
+   //Moves::M_R(0,0);
+    //delay(1000);
+    //Moves::TURN_L(0,0);
+    //Moves::FFT_M(0,0);
+   //
+  // Moves::FFT_U(1,0,0);
+   //Moves::F_Shoot_R(0,0);
+   //delay(1000);
+   //Moves::GET_UP_BACK(0,0);
+    //Moves::GET_UP_FRONT(0,0); 
+  Moves::Check();
+
+    
    }
    
   /*}

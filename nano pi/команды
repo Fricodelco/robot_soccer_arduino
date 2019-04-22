@@ -3,4 +3,7 @@ nmcli wlan0 connect MGTS226 password 21031987
 nmcli connect MGTS226 password 21031987
 nmcli wifi connect MGTS226 password 21031987
 nmcli dev wifi connect MGTS226 password 21031987
+scp -r root@10.10.11.2:/root/catkin_ws/src Рабочий\ стол/soccer_ros/
+
+
 
